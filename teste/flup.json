@@ -1,0 +1,55 @@
+{
+  "project": {
+    "info": {
+      "name": "Trellos",
+      "version": "1.0.0",
+      "author": {
+        "name": "Felipe",
+        "github": "http://google.com",
+        "email": "teste@teste.com"
+      },
+      "keywords": "[trello,flup]",
+      "description": "trello",
+      "package": "com.project.trello"
+    }
+  },
+  "configs": {
+    "databases": [
+      {
+        "name": "Default",
+        "type": "MYSQL",
+        "username": "root",
+        "password": "123456",
+        "database": "trello",
+        "url": "localhost:3306"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "info": {
+        "name": "Tickets",
+        "version": "1.0.0",
+        "author": {
+          "name": "Felipe",
+          "github": "http://google.com",
+          "email": "teste@teste.com"
+        },
+        "keywords": "[tiket]",
+        "description": "ticket",
+        "package": "flup.module.ticket"
+      },
+      "config": [],
+      "entity": [
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "age",
+          "type": "Integer"
+        }
+      ]
+    }
+  ]
+}

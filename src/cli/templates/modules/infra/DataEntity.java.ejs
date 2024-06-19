@@ -1,0 +1,127 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra;
+
+import <%= props.package %>.modules.<%= name %>.domain.<%=name %>;
+import <%= props.package %>.modules.<%= name %>.domain.<%=name %>ID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.Instant;
+
+@Entity
+@Table(name="<%= name %>")
+public class <%= name %>DataEntity {
+
+    @Id
+    private String id;
+    <%- props.columns %>
+
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    private Instant updatedAt;
+
+    @Column(name = "deleted_at", columnDefinition = "DATETIME(6)")
+    private Instant deletedAt;
+
+    public <%= name %>DataEntity(){}
+    private <%= name %>DataEntity(
+            final String id,
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getFinal().getType().getKey().exec() %>,
+            <%_}) _%>
+            final boolean active,
+            final Instant createdAt,
+            final Instant updatedAt,
+            final Instant deletedAt
+    ) {
+        this.id = id;
+        <%_ props.entity.forEach((item) => { _%>
+        this.<%- new props.declarationType({entity: item}).getKey().getCustom("=").getKey().exec() %>;
+        <%_}) _%>
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
+    public static <%= name %>DataEntity from(final <%= name %> a<%= name %>){
+        return new <%= name %>DataEntity(
+                a<%= name %>.getId().getValue(),
+                <%_ props.entity.forEach((item) => { _%>
+                a<%= name %><%- new props.declarationType({entity: item}).getPrefix(".get").exec() %>(),
+                <%_}) _%>
+                a<%= name %>.isActive(),
+                a<%= name %>.getCreatedAt(),
+                a<%= name %>.getUpdatedAt(),
+                a<%= name %>.getDeletedAt()
+        );
+    }
+
+    public <%= name %> toAggregate(){
+        return <%= name %>.with(
+                <%= name %>ID.from(getId()),
+                <%_ props.entity.forEach((item) => { _%>
+                <%- new props.declarationType({entity: item}).getPrefix("get").exec() %>(),
+                <%_}) _%>
+                getActive(),
+                getCreatedAt(),
+                getUpdatedAt(),
+                getDeletedAt()
+        );
+    }
+
+    
+    public String getId() {
+        return id;
+    }
+
+    <%_ props.entity.forEach((item) => { _%>
+    public <%- new props.declarationType({entity: item}).getType().getPrefix("get").exec() %>(){
+        return <%- item.name %>;
+    }
+    <%_}) _%>
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }    
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
+    }
+    
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    <%_ props.entity.forEach((item) => { _%>
+    public void <%- new props.declarationType({entity: item}).getPrefixSuffix("set", "(").getType().getKey().exec() %>){ this.<%- item.name %> = <%- item.name %>; }
+    <%_}) _%>
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    public void setDeletedAt(Instant deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+}
+

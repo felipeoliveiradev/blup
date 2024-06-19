@@ -1,0 +1,19 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+<%_ const plural = new props.lettersCases(props.plural).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra.http.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.time.Instant;
+
+public record List<%= plural %>Response (
+        @JsonProperty("id") String id,
+        <%_ props.entity.forEach((item) => { _%>
+        @JsonProperty("<%- new props.lettersCases(item.name).CamelToSnake()  -%>") <%- new props.declarationType({entity: item}).getType().getKey().exec() %>,
+        <%_}) _%>
+        @JsonProperty("is_active") Boolean active,
+        @JsonProperty("created_at") Instant createdAt,
+        @JsonProperty("updated_at") Instant updatedAt,
+        @JsonProperty("deleted_at") Instant deletedAt
+) {
+}

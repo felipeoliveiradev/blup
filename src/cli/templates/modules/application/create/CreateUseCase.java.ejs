@@ -1,0 +1,8 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.create;
+import <%= props.package %>.modules.Flup.system.required.helpers.UseCase;
+import <%= props.package %>.modules.Flup.system.validation.handlers.Notification;
+import io.vavr.control.Either;
+
+public abstract  class Create<%= props.name.singular %>UseCase extends UseCase<Create<%= props.name.singular %>Command, Either<Notification, Create<%= props.name.singular %>Output>> {
+
+}

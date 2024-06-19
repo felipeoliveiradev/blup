@@ -1,0 +1,15 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.create;
+
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>;
+
+public record Create<%= props.name.singular %>Output(
+        String id
+) {
+    public static Create<%= props.name.singular %>Output from(final String anId){
+        return new Create<%= props.name.singular %>Output(anId);
+    }
+
+    public static Create<%= props.name.singular %>Output from(final <%= props.name.singular %> a<%= props.name.singular %>){
+        return new Create<%= props.name.singular %>Output(a<%= props.name.singular %>.getId().getValue());
+    }
+}

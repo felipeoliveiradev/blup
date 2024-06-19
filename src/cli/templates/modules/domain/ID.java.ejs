@@ -1,0 +1,49 @@
+
+package <%= props.package %>.modules.<%= props.name %>.domain;
+
+
+import <%= props.package %>.modules.Flup.system.required.helpers.Identifier;
+
+import java.util.Objects;
+import java.util.UUID;
+
+public class <%= props.name %>ID extends Identifier {
+
+    private final String value;
+
+
+    public <%= props.name %>ID(final String value) {
+        Objects.requireNonNull(value);
+        this.value = value;
+    }
+
+    public static <%= props.name %>ID unique(){
+        return  <%= props.name %>ID.from(UUID.randomUUID());
+    }
+
+    public static  <%= props.name %>ID from (final String anID){
+        return new <%= props.name %>ID(anID);
+    }
+
+    public static <%= props.name %>ID from(final UUID anID){
+        return  new <%= props.name %>ID(anID.toString().toLowerCase());
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final <%= props.name %>ID that = (<%= props.name %>ID) o;
+        return Objects.equals(getValue(), that.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getValue());
+    }
+}

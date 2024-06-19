@@ -1,0 +1,22 @@
+package <%= props.package %>.modules.<%= props.name?.singular %>.application.retrieve.list;
+
+
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>Gateway;
+import <%= props.package %>.modules.Flup.system.required.pagination.Pagination;
+import <%= props.package %>.modules.Flup.system.required.pagination.SearchQuery;
+
+import java.util.Objects;
+
+public class DefaultList<%= props.name?.plural %>UseCase extends List<%= props.name?.plural %>UseCase{
+
+    private final <%= props.name?.singular %>Gateway <%= props.packageName %>Gateway;
+
+    public DefaultList<%= props.name?.plural %>UseCase(final <%= props.name?.singular %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = Objects.requireNonNull(<%= props.packageName %>Gateway);
+    }
+    @Override
+    public Pagination<List<%= props.name?.plural %>Output> execute(final SearchQuery aQuery) {
+        return this.<%= props.packageName %>Gateway.findAll(aQuery).map(List<%= props.name?.plural %>Output::from);
+    }
+
+}

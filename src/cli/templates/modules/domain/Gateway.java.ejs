@@ -1,0 +1,18 @@
+package <%= props.package %>.modules.<%= props.name %>.domain;
+
+import <%= props.package %>.modules.Flup.system.required.pagination.Pagination;
+import <%= props.package %>.modules.Flup.system.required.pagination.SearchQuery;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeoutException;
+
+public interface <%= props.name %>Gateway {
+    <%= props.name %> create(<%= props.name %> a<%= props.name %>) throws IOException, TimeoutException;
+    void deleteById(<%= props.name %>ID anID);
+    Optional<<%= props.name %>> findById(<%= props.name %>ID anID);
+    <%= props.name %> update(<%= props.name %> a<%= props.name %>);
+    Pagination<<%= props.name %>> findAll(SearchQuery aQuery);
+    List<<%= props.name %>> existsByIds(Iterable<<%= props.name %>ID> ids);
+}

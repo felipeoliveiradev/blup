@@ -1,0 +1,16 @@
+package <%= props.package %>.modules.<%- props.name.singular -%>.application.update;
+
+
+import <%= props.package %>.modules.<%- props.name.singular -%>.domain.<%- props.name.singular -%>;
+
+public record Update<%- props.name.singular -%>Output(
+        String id
+) {
+
+    public static Update<%- props.name.singular -%>Output from(final String anId){
+        return new Update<%- props.name.singular -%>Output(anId);
+    }
+    public static Update<%- props.name.singular -%>Output from(final <%- props.name.singular -%> a<%- props.name.singular -%>){
+        return new Update<%- props.name.singular -%>Output(a<%- props.name.singular -%>.getId().getValue());
+    }
+}

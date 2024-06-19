@@ -1,0 +1,46 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.create;
+
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>;
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>Gateway;
+import <%= props.package %>.modules.Flup.system.validation.handlers.Notification;
+import io.vavr.control.Either;
+
+import java.util.Objects;
+
+import static io.vavr.API.Left;
+import static io.vavr.API.Try;
+
+public class DefaultCreate<%= props.name.singular %>UseCase  extends Create<%= props.name.singular %>UseCase{
+
+    private final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway;
+
+    public DefaultCreate<%= props.name.singular %>UseCase(final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = Objects.requireNonNull(<%= props.packageName %>Gateway);
+    }
+
+    @Override
+    public Either<Notification, Create<%= props.name.singular %>Output> execute(final Create<%= props.name.singular %>Command aCommand) {
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getFinal().getType().getField().getExtraKey("aCommand", item.name).exec() %>();
+        <%_}) _%>
+        final var isActive = aCommand.isActive();
+
+        final var notificationHandler = Notification.create();
+
+        final var a<%= props.name.singular %> = <%= props.name.singular %>.new<%= props.name.singular %>(
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getField().exec() %>,
+            <%_}) _%>
+            isActive
+        );
+        a<%= props.name.singular %>.validate(notificationHandler);
+
+        return notificationHandler.hasError() ? Left(notificationHandler) : create(a<%= props.name.singular %>);
+    }
+
+    private Either<Notification, Create<%= props.name.singular %>Output> create(final <%= props.name.singular %> a<%= props.name.singular %>){
+        return Try(() -> this.<%= props.packageName %>Gateway.create(a<%= props.name.singular %>))
+                .toEither()
+                .bimap(Notification::create, Create<%= props.name.singular %>Output::from);
+    }
+}

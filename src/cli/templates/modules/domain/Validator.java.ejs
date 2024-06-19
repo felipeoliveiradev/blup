@@ -1,0 +1,19 @@
+package <%= props.package %>.modules.<%= props.name %>.domain;
+
+import <%= props.package %>.modules.Flup.system.validation.ValidationField;
+import <%= props.package %>.modules.Flup.system.validation.Validator;
+import <%= props.package %>.modules.Flup.system.validation.handlers.ValidationHandler;
+import <%= props.package %>.modules.Flup.system.validation.Error;
+
+public class <%= props.name %>Validator  extends Validator {
+    private final <%= props.name %> <%= props.name %>;
+
+    public <%= props.name %>Validator(final <%= props.name %> a<%= props.name %>, final ValidationHandler aHandler) {
+        super(aHandler);
+        this.<%= props.name %> = a<%= props.name %>;
+    }
+
+    @Override
+    public void validate() {
+    }
+}

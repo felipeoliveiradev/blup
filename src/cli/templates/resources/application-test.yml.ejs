@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: <%= props.username %>
+    password: <%= props.password %>
+    url: jdbc:h2:mem:<%- props.schema %>;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+  h2:
+    console:
+      enabled: true
+      path: /h2

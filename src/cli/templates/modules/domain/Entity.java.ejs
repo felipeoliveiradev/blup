@@ -1,0 +1,175 @@
+package <%= props.package %>.modules.<%= props.name %>.domain;
+
+
+import <%= props.package %>.modules.<%= props.name %>.domain.<%= props.name %>ID;
+import <%= props.package %>.modules.Flup.system.required.helpers.AggregateRoot;
+import <%= props.package %>.modules.Flup.system.required.utils.InstantUtils;
+import <%= props.package %>.modules.Flup.system.validation.handlers.ValidationHandler;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+public class <%= props.name %> extends AggregateRoot<<%= props.name %>ID> implements Cloneable {
+    <%_ props.entity.forEach((item) => { _%>
+    <%- new props.declarationType({entity: item}).getPrivate().getType().getKey().exec() %>;
+    <%_}) _%>
+    private boolean active;
+    private final Instant createdAt;
+    private Instant updatedAt;
+    private Instant deletedAt;
+
+    private <%= props.name %>(
+            final <%= props.name %>ID anId,
+            <%_ props.entity.forEach((item) => { _%>
+            final <%- new props.declarationType({entity: item}).getType().getField().exec() %>,
+            <%_}) _%>
+            final boolean isActive,
+            final Instant createdDateField,
+            final Instant updatedDateField,
+            final Instant deletedDateField
+    ) {
+        super(anId);
+        <%_ props.entity.forEach((item) => { _%>
+        this.<%- new props.declarationType({entity: item}).getKey().getEqual().getField().exec() %>;
+        <%_}) _%>
+        this.active = isActive;
+        this.createdAt = Objects.requireNonNull(createdDateField, "'createdAt' should not be null");
+        this.updatedAt = Objects.requireNonNull(updatedDateField, "'updatedAt' should not be null");
+        this.deletedAt = deletedDateField;
+    }
+
+    public static <%= props.name %> new<%= props.name %>(
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getFinal().getType().getField().exec() %>,
+            <%_}) _%>
+            final boolean isActive
+    ) {
+        final var id = <%= props.name %>ID.unique();
+        final var now = Instant.now();
+        final var deletedAt = isActive ? null : now;
+        return new <%= props.name %>(
+                id,
+                <%_ props.entity.forEach((item) => { _%>
+                <%- new props.declarationType({entity: item}).getField().exec() %>,
+                <%_}) _%>
+                isActive,
+                now,
+                now,
+                deletedAt
+        );
+    }
+
+    public static <%= props.name %> with(
+            final <%= props.name %> a<%= props.name %>
+    ) {
+        return with(
+                a<%= props.name %>.id,
+                <%_ props.entity.forEach((item) => { _%>
+                a<%= props.name %>.<%- new props.declarationType({entity: item}).getKey().exec() %>,
+                <%_}) _%>
+                a<%= props.name %>.active,
+                a<%= props.name %>.createdAt,
+                a<%= props.name %>.updatedAt,
+                a<%= props.name %>.deletedAt
+        );
+    }
+
+    public static <%= props.name %> with(
+            final <%= props.name %>ID anId,
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getFinal().getType().getKey().exec() %>,
+            <%_}) _%>
+            final boolean active,
+            final Instant createdAt,
+            final Instant updatedAt,
+            final Instant deletedAt
+    ) {
+        return new <%= props.name %>(
+                anId,
+                <%_ props.entity.forEach((item) => { _%>
+                <%- new props.declarationType({entity: item}).getKey().exec() %>,
+                <%_}) _%>
+                active,
+                createdAt,
+                updatedAt,
+                deletedAt
+
+        );
+    }
+
+    @Override
+    public void validate(final ValidationHandler handler) {
+        new <%= props.name %>Validator(this, handler).validate();
+    }
+
+    public void deactivate() {
+        if (getDeletedAt() == null) {
+            this.deletedAt = Instant.now();
+        }
+        this.active = false;
+        this.updatedAt = Instant.now();
+    }
+
+    public void activate() {
+        this.deletedAt = null;
+        this.active = true;
+        this.updatedAt = Instant.now();
+    }
+
+
+    public <%= props.name %> update(
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getFinal().getType().getField().exec() %>,
+        <%_}) _%>
+        final boolean isActive
+        ) {
+        if (isActive) {
+            this.activate();
+        } else {
+            this.deactivate();
+        }
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getThis().getEqual().getField().exec() %>;
+        <%_}) _%>
+        this.updatedAt = Instant.now();
+        return this;
+    }
+
+    public <%= props.name %>ID getId() {
+        return id;
+    }
+
+    <%_ props.entity.forEach((item) => { _%>
+    public <%- new props.declarationType({entity: item}).getType().getPrefix("get").exec() %>(){
+        return <%= item.name %>;
+    }
+    <%_}) _%>
+    public boolean isActive() {
+        return active;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
+    }
+
+    @Override
+    public <%= props.name %> clone() {
+        try {
+            return (<%= props.name %>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
+
+}

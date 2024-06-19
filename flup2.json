@@ -1,0 +1,273 @@
+{
+  "project": {
+    "info": {
+      "name": "facebook",
+      "version": "1.0",
+      "keywords": "post",
+      "author": {
+        "name": "felipe",
+        "github": "http://github.com/felipeoliveiradev",
+        "email": "teste@teste.com"
+      },
+      "package": "com.facebook"
+    }
+  },
+  "configs": {
+    "database": [
+      {
+        "name": "default",
+        "type": "MYSQL",
+        "username": "root",
+        "password": "123456",
+        "database": "facebook",
+        "url": "localhost:3306"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "info": {
+        "name": "post",
+        "version": "1.0",
+        "description": "just a post module",
+        "keywords": "post",
+        "author": {
+          "name": "felipe",
+          "github": "http://github.com/felipeoliveiradev",
+          "email": "teste@teste.com"
+        }
+      },
+      "configs": {
+        "bank": {
+          "connections": [
+            {
+              "name": "MYSQL"
+            }
+          ]
+        }
+      },
+      "entity": [
+        {
+          "name": "name",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "maxLength": 255,
+            "minLength": 3,
+            "name": true
+          }
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255
+            }
+          },
+          "validations": {
+            "maxLength": 255,
+            "minLength": 3
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "category",
+        "version": "1.0",
+        "description": "just a category module",
+        "keyword": "category",
+        "author": {
+          "name": "felipe",
+          "github": "http://github.com/felipeoliveiradev",
+          "email": "teste@teste.com"
+        }
+      },
+      "configs": {
+        "bank": {
+          "connections": [
+            {
+              "name": "MYSQL"
+            }
+          ]
+        }
+      },
+      "entity": [
+        {
+          "name": "name",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "maxLength": 255,
+            "minLength": 3,
+            "name": true
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "login",
+        "version": "1.0",
+        "description": "Module Auth with Keycloak",
+        "keyword": "category",
+        "author": {
+          "name": "felipe",
+          "github": "http://github.com/felipeoliveiradev",
+          "email": "teste@teste.com"
+        }
+      },
+      "configs": {
+        "bank": null
+      },
+      "entity": [
+        {
+          "name": "username",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "username": true
+          }
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "password": true
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "token",
+        "version": "1.0",
+        "description": "Module Token with Keycloak",
+        "keyword": "token",
+        "author": {
+          "name": "felipe",
+          "github": "http://github.com/felipeoliveiradev",
+          "email": "teste@teste.com"
+        }
+      },
+      "configs": {
+        "bank": null
+      },
+      "entity": [
+        {
+          "name": "accessToken",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "expiresIn",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "refreshExpiresIn",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "refreshToken",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "tokenType",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "notBeforePolicy",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        },
+        {
+          "name": "scope",
+          "type": "String",
+          "bank": {
+            "props": {
+              "size": 255,
+              "required": true
+            }
+          },
+          "validations": {
+            "minLength": 3
+          }
+        }
+      ]
+    }
+  ]
+}

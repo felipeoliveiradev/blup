@@ -1,0 +1,9 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.update;
+
+import <%= props.package %>.modules.Flup.system.required.helpers.UseCase;
+import <%= props.package %>.modules.Flup.system.validation.handlers.Notification;
+import io.vavr.control.Either;
+
+public abstract  class Update<%= props.name.singular %>UseCase extends UseCase<Update<%= props.name.singular %>Command, Either<Notification, Update<%= props.name.singular %>Output>> {
+
+}

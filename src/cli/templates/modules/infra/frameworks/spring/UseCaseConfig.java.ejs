@@ -1,0 +1,52 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+<%_ const plural = new props.lettersCases(props.plural).Capitalizer()  _%>
+
+package <%= props.package %>.modules.<%= name %>.infra.frameworks.spring;
+
+import <%= props.package %>.modules.<%= name %>.application.create.Create<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.create.DefaultCreate<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.delete.DefaultDelete<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.delete.Delete<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.byId.<%= name %>ByIdUseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.byId.Default<%= name %>ByIdUseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.list.DefaultList<%= plural %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.list.List<%= plural %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.update.DefaultUpdate<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.update.Update<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.domain.<%= name %>Gateway;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class <%= name %>UseCaseConfig {
+    private final <%= name %>Gateway <%= props.packageName %>Gateway;
+
+    public <%= name %>UseCaseConfig(final <%= name %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = <%= props.packageName %>Gateway;
+    }
+
+    @Bean
+    public Create<%= name %>UseCase create<%= name %>UseCase(){
+        return new DefaultCreate<%= name %>UseCase(<%= props.packageName %>Gateway);
+    }
+
+    @Bean
+    public Update<%= name %>UseCase update<%= name %>UseCase(){
+        return new DefaultUpdate<%= name %>UseCase(<%= props.packageName %>Gateway);
+    }
+
+    @Bean
+    public Delete<%= name %>UseCase delete<%= name %>UseCase(){
+        return new DefaultDelete<%= name %>UseCase(<%= props.packageName %>Gateway);
+    }
+
+    @Bean
+    public <%= name %>ByIdUseCase <%= name %>ByIdUseCase(){
+        return new Default<%= name %>ByIdUseCase(<%= props.packageName %>Gateway);
+    }
+
+    @Bean
+    public List<%= plural %>UseCase list<%= plural %>UseCase(){
+        return new DefaultList<%= plural %>UseCase(<%= props.packageName %>Gateway);
+    }
+}

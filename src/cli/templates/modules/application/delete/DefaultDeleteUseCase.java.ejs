@@ -1,0 +1,28 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.delete;
+
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>Gateway;
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>ID;
+import <%= props.package %>.modules.Flup.system.validation.Error;
+import <%= props.package %>.modules.Flup.system.validation.Exceptions.DomainException;
+
+import java.util.Objects;
+import java.util.function.Supplier;
+
+public class DefaultDelete<%= props.name.singular %>UseCase extends Delete<%= props.name.singular %>UseCase {
+
+    private final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway;
+
+    public DefaultDelete<%= props.name.singular %>UseCase(final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = Objects.requireNonNull(<%= props.packageName %>Gateway);
+    }
+
+    @Override
+    public void execute(final String anIn) {
+        final var a<%= props.name.singular %>Id = <%= props.name.singular %>ID.from(anIn);
+        this.<%= props.packageName %>Gateway.findById(<%= props.name.singular %>ID.from(anIn)).map(Delete<%= props.name.singular %>Output::from).orElseThrow(NotFound(a<%= props.name.singular %>Id));
+        this.<%= props.packageName %>Gateway.deleteById(<%= props.name.singular %>ID.from(anIn));
+    }
+    private static Supplier<DomainException> NotFound(final <%= props.name.singular %>ID anId) {
+        return () -> DomainException.with(new Error("<%= props.name.singular %> with ID %s was not found".formatted(anId.getValue())));
+    }
+}

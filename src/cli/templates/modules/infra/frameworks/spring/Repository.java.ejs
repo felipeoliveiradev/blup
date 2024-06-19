@@ -1,0 +1,13 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+<%_ const plural = new props.lettersCases(props.plural).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra.frameworks.spring;
+
+import <%= props.package %>.modules.<%= name %>.infra.<%= name %>DataEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface <%= name %>Repository extends JpaRepository<<%= name %>DataEntity, String> {
+    Page<<%= name %>DataEntity> findAll(Specification<<%= name %>DataEntity> whereClause, Pageable page);
+}

@@ -1,0 +1,31 @@
+package <%= props.package %>.modules.<%= props.name?.singular %>.application.retrieve.byId;
+
+
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>;
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>Gateway;
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>ID;
+import <%= props.package %>.modules.Flup.system.validation.Exceptions.NotFoundException;
+
+import java.util.Objects;
+import java.util.function.Supplier;
+
+public class Default<%= props.name?.singular %>ByIdUseCase extends <%= props.name?.singular %>ByIdUseCase {
+
+    private final <%= props.name?.singular %>Gateway <%= props.packageName %>Gateway;
+
+    public Default<%= props.name?.singular %>ByIdUseCase(final <%= props.name?.singular %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = Objects.requireNonNull(<%= props.packageName %>Gateway);
+    }
+
+    @Override
+    public <%= props.name?.singular %>ByIdOutput execute(final String anIn) {
+        final var a<%= props.name?.singular %>Id = <%= props.name?.singular %>ID.from(anIn);
+        return this.<%= props.packageName %>Gateway.findById(a<%= props.name?.singular %>Id)
+                .map(<%= props.name?.singular %>ByIdOutput::from)
+                .orElseThrow(NotFound(a<%= props.name?.singular %>Id));
+    }
+
+    private static Supplier<NotFoundException> NotFound(final <%= props.name?.singular %>ID anId) {
+        return () -> NotFoundException.with(<%= props.name?.singular %>.class, anId);
+    }
+}

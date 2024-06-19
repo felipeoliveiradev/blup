@@ -1,0 +1,39 @@
+{
+  "project": {
+    "info": {
+      "name": "Trello",
+      "version": "1.0.0",
+      "author": {
+        "name": "Felipe",
+        "github": "http://localhost:3000",
+        "email": "felipe@oliveira.com"
+      },
+      "keywords": "[\"teste\"]",
+      "description": "teste",
+      "package": "org.trello.com"
+    }
+  },
+  "configs": {},
+  "modules": [
+    {
+      "info": {
+        "name": "Catalog",
+        "version": "1.0.0",
+        "author": {
+          "name": "Felipe",
+          "github": "http://localhost:3000",
+          "email": "teste@teste.com"
+        },
+        "keywords": "[\"flup\"]",
+        "description": "Feature Catalog",
+        "package": "flup.module.catalog"
+      },
+      "entity": [
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.create;
+
+public record Create<%= props.name.singular %>Command(
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getType().getKey().exec() %>,
+        <%_}) _%>
+        boolean isActive
+) {
+    public static Create<%= props.name.singular %>Command with(
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getFinal().getType().getField().exec() %>,
+        <%_}) _%>
+        final boolean isActive
+    ) {
+        return new Create<%= props.name.singular %>Command(
+            <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getField().exec() %>,
+            <%_}) _%>
+        isActive);
+    }
+}

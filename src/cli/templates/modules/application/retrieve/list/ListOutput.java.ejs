@@ -1,0 +1,31 @@
+package <%= props.package %>.modules.<%= props.name?.singular %>.application.retrieve.list;
+
+
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>;
+import <%= props.package %>.modules.<%= props.name?.singular %>.domain.<%= props.name?.singular %>ID;
+
+import java.time.Instant;
+
+public record List<%= props.name?.plural %>Output(
+        <%= props.name?.singular %>ID id,
+        <%_ props.entity?.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getType().getKey().exec() %>,
+        <%_}) _%>
+        boolean isActive,
+        Instant createdAt,
+        Instant updatedAt,
+        Instant deletedAt
+) {
+    public static List<%= props.name?.plural %>Output from(final <%= props.name?.singular %> a<%= props.name?.singular %>){
+        return new List<%= props.name?.plural %>Output(
+                a<%= props.name?.singular %>.getId(),
+                <%_ props.entity?.forEach((item) => { _%>
+                <%- new props.declarationType({entity: item}).getPrefixSuffix(`a${props.name?.singular}.get`, "()").exec() %>,
+                <%_}) _%>
+                a<%= props.name?.singular %>.isActive(),
+                a<%= props.name?.singular %>.getUpdatedAt(),
+                a<%= props.name?.singular %>.getCreatedAt(),
+                a<%= props.name?.singular %>.getDeletedAt()
+        );
+    }
+}

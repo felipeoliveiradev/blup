@@ -1,0 +1,37 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+<%_ const plural = new props.lettersCases(props.plural).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra;
+
+import <%= props.package %>.modules.<%= name %>.application.retrieve.byId.<%= name %>Output;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.list.List<%= plural %>Output;
+import <%= props.package %>.modules.<%= name %>.infra.http.response.<%= name %>Response;
+import <%= props.package %>.modules.<%= name %>.infra.http.response.List<%= plural %>Response;
+
+public interface <%= name %>APIPresenter {
+
+    static <%= name %>Response present(final <%= name %>Output output) {
+        return new <%= name %>Response(
+                output.id(),
+                <%_ props.entity.forEach((item) => { _%>
+                output.<%- new props.declarationType({entity: item}).getKey().exec() %>(),
+                <%_}) _%>
+                output.isActive(),
+                output.createdAt(),
+                output.updatedAt(),
+                output.deletedAt()
+        );
+    }
+
+    static List<%= plural %>Response present(final List<%= plural %>Output output) {
+        return new List<%= plural %>Response(
+                output.id().getValue(),
+                <%_ props.entity.forEach((item) => { _%>
+                output.<%- new props.declarationType({entity: item}).getKey().exec() %>(),
+                <%_}) _%>
+                output.isActive(),
+                output.updatedAt(),
+                output.createdAt(),
+                output.deletedAt()
+        );
+    }
+}

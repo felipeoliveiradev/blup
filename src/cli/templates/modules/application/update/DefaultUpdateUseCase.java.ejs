@@ -1,0 +1,56 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.update;
+
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>;
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>Gateway;
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>ID;
+import <%= props.package %>.modules.Flup.system.validation.Exceptions.DomainException;
+import <%= props.package %>.modules.Flup.system.validation.Exceptions.NotFoundException;
+import <%= props.package %>.modules.Flup.system.validation.handlers.Notification;
+import io.vavr.control.Either;
+
+import java.util.Objects;
+import java.util.function.Supplier;
+
+import static io.vavr.API.Left;
+import static io.vavr.API.Try;
+
+public class DefaultUpdate<%= props.name.singular %>UseCase extends Update<%= props.name.singular %>UseCase {
+
+    private final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway;
+
+    public DefaultUpdate<%= props.name.singular %>UseCase(final <%= props.name.singular %>Gateway <%= props.packageName %>Gateway) {
+        this.<%= props.packageName %>Gateway = Objects.requireNonNull(<%= props.packageName %>Gateway);
+    }
+
+    @Override
+    public Either<Notification, Update<%= props.name.singular %>Output> execute(final Update<%= props.name.singular %>Command aCommand) {
+        final <%= props.name.singular %>ID anId = <%= props.name.singular %>ID.from(aCommand.id());
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getFinal().getType().getField().getExtraKey("aCommand", item.name).exec() %>();
+        <%_}) _%>
+        final boolean isActive = aCommand.isActive();
+
+        final <%= props.name.singular %> a<%= props.name.singular %> = this.<%= props.packageName %>Gateway.findById(anId)
+                .orElseThrow(NotFound(anId));
+
+        final Notification notificationHandler = Notification.create();
+        a<%= props.name.singular %>.update(
+                <%_ props.entity.forEach((item) => { _%>
+                <%- new props.declarationType({entity: item}).getField().exec() %>,
+                <%_}) _%>
+                isActive
+            ).validate(notificationHandler);
+
+        return notificationHandler.hasError() ? Left(notificationHandler) : update(a<%= props.name.singular %>);
+    }
+
+    private Either<Notification, Update<%= props.name.singular %>Output> update(final <%= props.name.singular %> a<%= props.name.singular %>){
+        return Try(() -> this.<%= props.packageName %>Gateway.update(a<%= props.name.singular %>))
+                .toEither()
+                .bimap(Notification::create, Update<%= props.name.singular %>Output::from);
+    }
+
+    private static Supplier<DomainException> NotFound(final <%= props.name.singular %>ID anId) {
+        return () -> NotFoundException.with(<%= props.name.singular %>.class, <%= props.name.singular %>ID.from(anId.getValue()));
+    }
+}

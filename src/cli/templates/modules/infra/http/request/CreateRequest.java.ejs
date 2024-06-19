@@ -1,0 +1,12 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra.http.request;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record Create<%= name %>Request(
+        <%_ props.entity.forEach((item) => { _%>
+        @JsonProperty("<%- new props.lettersCases(item.name).CamelToSnake()  -%>") <%- new props.declarationType({entity: item}).getType().getKey().exec() %>,
+        <%_}) _%>
+        @JsonProperty("is_active") Boolean active
+) {
+}

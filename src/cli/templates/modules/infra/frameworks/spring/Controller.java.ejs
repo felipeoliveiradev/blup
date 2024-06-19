@@ -1,0 +1,103 @@
+<%_ const name = new props.lettersCases(props.packageName).Capitalizer()  _%>
+<%_ const plural = new props.lettersCases(props.plural).Capitalizer()  _%>
+package <%= props.package %>.modules.<%= name %>.infra.frameworks.spring;
+
+
+import <%= props.package %>.modules.<%= name %>.application.create.Create<%= name %>Command;
+import <%= props.package %>.modules.<%= name %>.application.create.Create<%= name %>Output;
+import <%= props.package %>.modules.<%= name %>.application.create.Create<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.delete.Delete<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.byId.<%= name %>ByIdUseCase;
+import <%= props.package %>.modules.<%= name %>.application.retrieve.list.List<%= plural %>UseCase;
+import <%= props.package %>.modules.<%= name %>.application.update.Update<%= name %>Command;
+import <%= props.package %>.modules.<%= name %>.application.update.Update<%= name %>Output;
+import <%= props.package %>.modules.<%= name %>.application.update.Update<%= name %>UseCase;
+import <%= props.package %>.modules.<%= name %>.infra.<%= name %>APIPresenter;
+import <%= props.package %>.modules.<%= name %>.infra.http.request.Create<%= name %>Request;
+import <%= props.package %>.modules.<%= name %>.infra.http.request.Update<%= name %>Request;
+import <%= props.package %>.modules.<%= name %>.infra.http.response.<%= name %>Response;
+import <%= props.package %>.modules.<%= name %>.infra.http.response.List<%= plural %>Response;
+import <%= props.package %>.modules.required.pagination.Pagination;
+import <%= props.package %>.modules.required.pagination.SearchQuery;
+import <%= props.package %>.modules.validation.handlers.Notification;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.Objects;
+import java.util.function.Function;
+
+@RestController
+public class <%= name %>Controller implements <%= name %>API {
+
+    private final Create<%= name %>UseCase <%= props.packageName %>UseCase;
+    private final <%= name %>ByIdUseCase <%= props.packageName %>ByIdUseCase;
+    private final Update<%= name %>UseCase update<%= name %>UseCase;
+    private final Delete<%= name %>UseCase delete<%= name %>UseCase;
+    private final List<%= plural %>UseCase list<%= plural %>UseCase;
+
+    public <%= name %>Controller(
+            final Create<%= name %>UseCase <%= props.packageName %>UseCase,
+            final <%= name %>ByIdUseCase <%= props.packageName %>ByIdUseCase,
+            final Update<%= name %>UseCase update<%= name %>UseCase,
+            final Delete<%= name %>UseCase delete<%= name %>UseCase,
+            final List<%= plural %>UseCase list<%= plural %>UseCase
+    ) {
+        this.<%= props.packageName %>UseCase = Objects.requireNonNull(<%= props.packageName %>UseCase);
+        this.<%= props.packageName %>ByIdUseCase = Objects.requireNonNull(<%= props.packageName %>ByIdUseCase);
+        this.update<%= name %>UseCase = update<%= name %>UseCase;
+        this.delete<%= name %>UseCase = delete<%= name %>UseCase;
+        this.list<%= plural %>UseCase = list<%= plural %>UseCase;
+    }
+
+    @Override
+    public ResponseEntity<?> create<%= name %>(final Create<%= name %>Request input) {
+
+        final Create<%= name %>Command aCommand = Create<%= name %>Command.with(
+                <%_ props.entity.forEach((item) => { _%>
+                input.<%- new props.declarationType({entity: item}).getKey().exec() %>(),
+                <%_}) _%>
+                input.active() != null  ? input.active() : true
+        );
+
+        final Function<Notification, ResponseEntity> onError = ResponseEntity.unprocessableEntity()::body;
+        final Function<Create<%= name %>Output, ResponseEntity> onSuccess = output -> ResponseEntity.created(URI.create("/<%= plural %>/" + output.id())).body(output);
+        return this.<%= props.packageName %>UseCase.execute(aCommand).fold(onError, onSuccess);
+    }
+
+    @Override
+    public Pagination<List<%= plural %>Response> list<%= plural %>(
+            final String search,
+            int page,
+            int perPage,
+            final String sort,
+            final String direction
+    ) {
+        return list<%= plural %>UseCase.execute(new SearchQuery(page, perPage, search, sort, direction)).map(<%= name %>APIPresenter::present);
+    }
+
+    @Override
+    public <%= name %>Response getById(final String id) {
+        return <%= name %>APIPresenter.present(this.<%= props.packageName %>ByIdUseCase.execute(id));
+    }
+
+    @Override
+    public ResponseEntity<?> updateById(final String id, final Update<%= name %>Request input) {
+        final Update<%= name %>Command aCommand = Update<%= name %>Command.with(
+                id,
+                <%_ props.entity.forEach((item) => { _%>
+                input.<%- new props.declarationType({entity: item}).getKey().exec() %>(),
+                <%_}) _%>
+                input.active() != null  ? input.active() : true
+        );
+
+        final Function<Notification, ResponseEntity<?>> onError = ResponseEntity.unprocessableEntity()::body;
+        final Function<Update<%= name %>Output, ResponseEntity<?>> onSuccess = ResponseEntity::ok;
+        return this.update<%= name %>UseCase.execute(aCommand).fold(onError, onSuccess);
+    }
+
+    @Override
+    public void deleteById(final String id) {
+        this.delete<%= name %>UseCase.execute(id);
+    }
+}

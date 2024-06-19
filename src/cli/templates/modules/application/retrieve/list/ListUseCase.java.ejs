@@ -1,0 +1,9 @@
+package <%= props.package %>.modules.<%= props.name?.singular %>.application.retrieve.list;
+
+import <%= props.package %>.modules.Flup.system.required.helpers.UseCase;
+import <%= props.package %>.modules.Flup.system.required.pagination.Pagination;
+import <%= props.package %>.modules.Flup.system.required.pagination.SearchQuery;
+
+public abstract class List<%= props.name.plural %>UseCase extends UseCase<SearchQuery, Pagination<List<%= props.name.plural %>Output>> {
+
+}

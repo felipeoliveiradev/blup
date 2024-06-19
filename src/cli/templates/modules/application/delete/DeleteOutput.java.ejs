@@ -1,0 +1,14 @@
+package <%= props.package %>.modules.<%= props.name.singular %>.application.delete;
+
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>;
+import <%= props.package %>.modules.<%= props.name.singular %>.domain.<%= props.name.singular %>ID;
+
+public record Delete<%= props.name.singular %>Output(
+        <%= props.name.singular %>ID id
+) {
+    public static Delete<%= props.name.singular %>Output from(final <%= props.name.singular %> a<%= props.name.singular %>){
+        return new Delete<%= props.name.singular %>Output(
+                a<%= props.name.singular %>.getId()
+        );
+    }
+}

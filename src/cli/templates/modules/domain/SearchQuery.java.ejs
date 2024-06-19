@@ -1,0 +1,10 @@
+package <%= props.package %>.modules.<%= props.name %>.domain;
+
+public record <%= props.name %>SearchQuery(
+        int page,
+        int perPage,
+        String terms,
+        String sort,
+        String direction
+) {
+}

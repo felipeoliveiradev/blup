@@ -1,0 +1,24 @@
+package <%= props.package %>.modules.<%- props.name.singular -%>.application.update;
+
+public record Update<%- props.name.singular -%>Command(
+        String id,
+        <%_ props.entity.forEach((item) => { _%>
+        <%- new props.declarationType({entity: item}).getType().getKey().exec() %>,
+        <%_}) _%>
+        boolean isActive
+) {
+    public static Update<%- props.name.singular -%>Command with(
+            final String aID,
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getFinal().getType().getField().exec() %>,
+            <%_}) _%>
+            final boolean isActive
+    ) {
+        return new Update<%- props.name.singular -%>Command(
+            aID, 
+            <%_ props.entity.forEach((item) => { _%>
+            <%- new props.declarationType({entity: item}).getField().exec() %>,
+            <%_}) _%>
+            isActive);
+    }
+}

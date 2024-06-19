@@ -1,0 +1,11 @@
+mysql:
+  username: <%= props.username %>
+  password: <%= props.password %>
+  schema: <%= props.schema %>
+  url: <%= props.url %>
+server:
+  port: 8081
+  undertow:
+    threads:
+      worker: 10
+      io: 2
